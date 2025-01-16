@@ -1,0 +1,70 @@
+{% extends 'vps_app/base.html' %}
+
+{% block title %}VPS List{% endblock %}
+
+{% block content %}
+<h1>VPS List</h1>
+<a class="btn btn-primary mb-2" href="{% url 'vps_create' %}">Create New VPS</a>
+<button type="button" class="btn btn-secondary mb-2" data-toggle="modal" data-target="#filterModal">
+    Filter
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="filterModalLabel">Filter VPS</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="get" id="filterForm">
+                    {{ filter.form.as_p }}
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="applyFilters()">Apply Filters</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>UID</th>
+            <th>CPU</th>
+            <th>RAM</th>
+            <th>HDD</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for vps in vps_list %}
+        <tr>
+            <td>{{ vps.uid }}</td>
+            <td>{{ vps.cpu }}</td>
+            <td>{{ vps.ram }}</td>
+            <td>{{ vps.hdd }}</td>
+            <td>{{ vps.status }}</td>
+            <td>
+                <a class="btn btn-secondary" href="{% url 'vps_update' vps.id %}">Edit</a>
+                <a class="btn btn-danger" href="{% url 'vps_delete' vps.id %}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    function applyFilters() {
+        $('#filterForm').submit();
+    }
+</script>
+{% endblock %}
+
+
